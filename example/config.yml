@@ -1,0 +1,17 @@
+resources:
+  getExample:
+    path: '/example\/(?<id>\d)/'
+    method: "/GET/"
+    class: 'ExampleResource'
+  home:
+    path: '/\//'
+    method: "/POST|GET/"
+    class: 'HomeResource'
+
+middlewares:
+  onError:
+    class: 'OnErrorMiddleware'
+    weight: 2
+  saveRequestBeforeRE:
+    class: 'OnErrorMiddleware'
+    weight: 2
