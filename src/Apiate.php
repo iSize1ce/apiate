@@ -12,6 +12,9 @@ class Apiate
      */
     private $config;
 
+    /**
+     * @param Config $config
+     */
     public function __construct(Config $config)
     {
         $this->config = $config;
@@ -21,7 +24,41 @@ class Apiate
      * @param Request $request
      * @throws Exception
      */
-    public function handleRequest(Request $request)
+    public function handleRequest(Request $request): void
+    {
+        $resource = $this->getResourceByRequest($request);
+
+        if ($resource === null) {
+            throw new Exception("Resource not found for {$request->getRealMethod()} {$request->getRequestUri()}");
+        }
+
+        $response = $this->getResponseByResource($resource);
+
+        $response->prepare($request);
+
+        $response->send();
+    }
+
+    /**
+     * @param ResourceInterface $resource
+     * @return Response
+     */
+    private function getResponseByResource(ResourceInterface $resource): Response
+    {
+        try {
+            $response = $resource->handle();
+        } catch (Exception $exception) {
+            // @todo handle middleware
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return ResourceInterface|null
+     */
+    private function getResourceByRequest(Request $request): ?ResourceInterface
     {
         $configResources = $this->config->getResources();
 
@@ -33,28 +70,16 @@ class Apiate
             if ($isResourcePathMatch && $isResourceMethodMatch) {
                 $resourceClass = $item->getClass();
 
+                if ( ! class_exists($resourceClass) || ! $resourceClass instanceof ResourceInterface) {
+                    throw new InvalidResourceClassException();
+                }
+
                 /** @var ResourceInterface $resource */
                 $resource = new $resourceClass($request);
                 break;
             }
         }
 
-        if ($resource === null) {
-            throw new Exception("Resource not found for {$request->getRealMethod()} {$request->getRequestUri()}");
-        }
-
-        $response = $resource->handle();
-
-        $this->handleResponse($request, $response);
-    }
-
-    /**
-     * @param Request $request
-     * @param Response $response
-     */
-    private function handleResponse(Request $request, Response $response)
-    {
-        $response->prepare($request);
-        $response->send();
+        return $resource;
     }
 }
