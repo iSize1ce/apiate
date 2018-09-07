@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use Resource\ResourceInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigFactory
@@ -14,19 +15,33 @@ class ConfigFactory
     {
         $configArray = Yaml::parseFile($pathToYaml);
 
-        if ( ! array_key_exists('resources', $configArray)) {
-            throw new InvalidConfigException();
-        }
+        self::validateConfigArray($configArray);
 
         $resources = [];
         foreach ($configArray['resources'] as $item) {
-            if ( ! array_key_exists('path', $item) || ! array_key_exists('method', $item) || ! array_key_exists('class', $item)) {
-                throw new InvalidConfigException();
-            }
-
             $resources[] = new ResourceConfig($item['path'], $item['method'], $item['class']);
         }
 
         return new Config($resources);
+    }
+
+    /**
+     * @param array $config
+     */
+    private static function validateConfigArray(array $config): void
+    {
+        if ( ! array_key_exists('resources', $config)) {
+            throw new InvalidConfigException();
+        }
+
+        foreach ($config['resources'] as $item) {
+            if ( ! array_key_exists('path', $item) || ! array_key_exists('method', $item) || ! array_key_exists('class', $item)) {
+                throw new InvalidConfigException();
+            }
+
+            if ( ! class_exists($item['class']) || ! $item['class'] instanceof ResourceInterface) {
+                throw new InvalidConfigException();
+            }
+        }
     }
 }

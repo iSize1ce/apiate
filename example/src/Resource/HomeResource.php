@@ -16,16 +16,15 @@ class HomeResource implements ResourceInterface
     {
         $text = $request->query->get('text');
 
-        if ($text) {
-            $this->text = $text;
+        if ( ! $text) {
+            throw new Exception('You must send some text!');
         }
-        else {
-            throw new Exception();
-        }
+
+        $this->text = $text;
     }
 
     public function handle(): Response
     {
-        return new JsonResponse($this->text, 404);
+        return new JsonResponse("Text is \"$this->text\"");
     }
 }

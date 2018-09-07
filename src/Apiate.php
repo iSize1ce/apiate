@@ -20,7 +20,11 @@ class Apiate
         $this->config = $config;
     }
 
-    public function getResponseByRequest(Request $request)
+    /**
+     * @param Request $request
+     * @return Response|null
+     */
+    public function getResponseByRequest(Request $request): ?Response
     {
         $resource = $this->getResourceByRequest($request);
 
@@ -62,10 +66,6 @@ class Apiate
 
             if ($isResourcePathMatch && $isResourceMethodMatch) {
                 $resourceClass = $item->getClass();
-
-                if ( ! class_exists($resourceClass) || ! $resourceClass instanceof ResourceInterface) {
-                    throw new InvalidResourceClassException();
-                }
 
                 /** @var ResourceInterface $resource */
                 $resource = new $resourceClass($request);
