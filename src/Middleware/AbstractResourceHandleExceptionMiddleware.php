@@ -13,9 +13,20 @@ abstract class AbstractResourceHandleExceptionMiddleware implements ResourceHand
 
     /**
      * @param Response $response
+     * @return AbstractResourceHandleExceptionMiddleware
      */
-    protected function setResponse(Response $response)
+    protected function setResponse(Response $response): AbstractResourceHandleExceptionMiddleware
     {
         $this->response = $response;
+
+        return $this;
+    }
+
+    /**
+     * @return Response
+     */
+    public function getResponse(): Response
+    {
+        return $this->response;
     }
 }
