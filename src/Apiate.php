@@ -20,38 +20,31 @@ class Apiate
         $this->config = $config;
     }
 
-    /**
-     * @param Request $request
-     * @throws Exception
-     */
-    public function handleRequest(Request $request): void
+    public function getResponseByRequest(Request $request)
     {
         $resource = $this->getResourceByRequest($request);
 
         if ($resource === null) {
-            throw new Exception("Resource not found for {$request->getRealMethod()} {$request->getRequestUri()}");
+            return $resource;
         }
 
-        $response = $this->getResponseByResource($resource);
+        $response = $resource->handle();
 
-        $response->prepare($request);
-
-        $response->send();
+        return $response;
     }
 
     /**
-     * @param ResourceInterface $resource
-     * @return Response
+     * @param Response $response
+     * @param Request|null $request
+     * @return void
      */
-    private function getResponseByResource(ResourceInterface $resource): Response
+    public function sendResponse(Response $response, Request $request = null): void
     {
-        try {
-            $response = $resource->handle();
-        } catch (Exception $exception) {
-            // @todo handle middleware
+        if ($request !== null) {
+            $response->prepare($request);
         }
 
-        return $response;
+        $response->send();
     }
 
     /**
