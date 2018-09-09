@@ -1,4 +1,22 @@
 {
+  "name": "isize1ce/apiate",
+  "type": "library",
+  "description": "Lightweight HTTP API microframework",
+  "keywords": [
+    "api",
+    "http",
+    "restful",
+    "microframework",
+    "framework"
+  ],
+  "homepage": "https://github.com/iSize1ce/apiate",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pavel <iSize1ce> Leschev",
+      "email": "isize1ce@gmail.com"
+    }
+  ],
   "require": {
     "php": "^7.1",
     "symfony/http-foundation": "^4.1",
