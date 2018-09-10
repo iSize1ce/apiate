@@ -17,6 +17,26 @@ class ConfigFactory
 
         self::validateConfigArray($configArray);
 
+        return self::createConfigFromArray($configArray);
+    }
+
+    /**
+     * @param array $configArray
+     * @return Config
+     */
+    public static function createFromArray(array $configArray): Config
+    {
+        self::validateConfigArray($configArray);
+
+        return self::createConfigFromArray($configArray);
+    }
+
+    /**
+     * @param array $configArray
+     * @return Config
+     */
+    private static function createConfigFromArray(array $configArray): Config
+    {
         $resources = [];
         foreach ($configArray['resources'] as $item) {
             $resources[] = new ResourceConfig($item['path'], $item['method'], $item['class']);
