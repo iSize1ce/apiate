@@ -65,11 +65,13 @@ class ConfigFactory
                 throw InvalidConfigException::createResourceDoesNotContainsRequiredField($resourceName, 'class');
             }
 
-            if ( ! class_exists($item['class'])) {
+            $class = $item['class'];
+
+            if ( ! class_exists($class)) {
                 throw InvalidConfigException::createResourceClassDoesNotExistsException($item['class']);
             }
 
-            if ( ! $item['class'] instanceof ResourceInterface) {
+            if ( ! is_subclass_of($class, ResourceInterface::class)) {
                 throw InvalidConfigException::createResourceClassDoesNotImplementsResourceInterfaceException($item['class']);
             }
         }
