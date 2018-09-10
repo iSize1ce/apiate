@@ -63,7 +63,7 @@ class Apiate
 
         $resource = null;
         foreach ($configResources as $name => $item) {
-            $isResourcePathMatch = preg_match($item->getPath(), $request->getRequestUri()) === 1;
+            $isResourcePathMatch = preg_match($item->getPath(), $request->getPathInfo()) === 1;
             $isResourceMethodMatch = preg_match($item->getMethod(), $request->getRealMethod()) === 1;
 
             if ($isResourcePathMatch && $isResourceMethodMatch) {
