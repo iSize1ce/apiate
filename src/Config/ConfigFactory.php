@@ -54,13 +54,23 @@ class ConfigFactory
             throw new InvalidConfigException();
         }
 
-        foreach ($config['resources'] as $item) {
-            if ( ! array_key_exists('path', $item) || ! array_key_exists('method', $item) || ! array_key_exists('class', $item)) {
-                throw new InvalidConfigException();
+        foreach ($config['resources'] as $resourceName => $item) {
+            if ( ! array_key_exists('path', $item)) {
+                throw InvalidConfigException::createResourceDoesNotContainsRequiredField($resourceName, 'path');
+            }
+            if ( ! array_key_exists('method', $item)) {
+                throw InvalidConfigException::createResourceDoesNotContainsRequiredField($resourceName, 'method');
+            }
+            if ( ! array_key_exists('class', $item)) {
+                throw InvalidConfigException::createResourceDoesNotContainsRequiredField($resourceName, 'class');
             }
 
-            if ( ! class_exists($item['class']) || ! $item['class'] instanceof ResourceInterface) {
-                throw new InvalidConfigException();
+            if ( ! class_exists($item['class'])) {
+                throw InvalidConfigException::createResourceClassDoesNotExistsException($item['class']);
+            }
+
+            if ( ! $item['class'] instanceof ResourceInterface) {
+                throw InvalidConfigException::createResourceClassDoesNotImplementsResourceInterfaceException($item['class']);
             }
         }
     }
