@@ -1,9 +1,0 @@
-resources:
-  getExample:
-    path: '/example\/(?<id>\d)/'
-    method: "/GET/"
-    class: 'ExampleResource'
-  home:
-    path: '/\//'
-    method: "/POST|GET/"
-    class: 'HomeResource'
