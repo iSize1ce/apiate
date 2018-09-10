@@ -1,6 +1,6 @@
 <?php
 
-namespace Resource;
+namespace Apiate\Resource;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

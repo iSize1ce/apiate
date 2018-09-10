@@ -1,7 +1,9 @@
 <?php
 
-use Config\Config;
-use Resource\ResourceInterface;
+namespace Apiate;
+
+use Apiate\Config\Config;
+use Apiate\Resource\ResourceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

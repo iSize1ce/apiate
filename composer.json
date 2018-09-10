@@ -23,8 +23,8 @@
     "symfony/yaml": "^4.1"
   },
   "autoload": {
-    "psr-0": {
-      "": "src"
+    "psr-4": {
+      "Apiate\\": "src"
     }
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Config;
+namespace Apiate\Config;
 
 class InvalidConfigException extends \Exception
 {

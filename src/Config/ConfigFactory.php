@@ -1,8 +1,8 @@
 <?php
 
-namespace Config;
+namespace Apiate\Config;
 
-use Resource\ResourceInterface;
+use Apiate\Resource\ResourceInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigFactory
