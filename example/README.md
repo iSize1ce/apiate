@@ -9,11 +9,16 @@ class ExampleResource implements ResourceInterface
 
     public function __construct(Request $request)
     {
+        // May contain validation/translation e.t.c.
+        // Set valid properties
+
         $this->someData = $request->get('query');
     }
 
     public function handle(): Response
     {
+        // Handle Request, send Response
+
         return new JsonResponse("Hello world by $this->someData");
     }
 }
@@ -32,18 +37,19 @@ $apiate = new Apiate($config);
 
 $request = Request::createFromGlobals();
 
+// Handle exception in Resource::handle()
 try {
     $response = $apiate->getResponseByRequest($request);
 } catch (Exception $exception) {
-    $apiate->sendResponse(new JsonResponse(['error' => $exception->getMessage()], 500));
+    $response = new JsonResponse(['error' => $exception->getMessage()], 500);
 }
 
-if ($response !== null) {
-    $apiate->sendResponse($response);
+// Handle when url does not match with your resources
+if ($response === null) {
+     $respone = new JsonResponse(null, 404);
 }
-else {
-    $apiate->sendResponse(new JsonResponse(null, 404));
-}
+
+$apiate->sendResponse($response);
 
 exit();
 ```
@@ -53,8 +59,11 @@ exit();
 ```yaml
 resources:
   getExample:
+    # regex, be careful
     path: '/example\/(?<id>\d)/'
+    # regex, be careful
     method: "/GET/"
+    # php class
     class: 'ExampleResource'
   home:
     path: '/\//'
