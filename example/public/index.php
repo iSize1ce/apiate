@@ -18,11 +18,10 @@ try {
     $response = new JsonResponse(['error' => $exception->getMessage()], 500);
 }
 
-if ($response !== null) {
-    $apiate->sendResponse($response);
+if ($response === null) {
+    $response = new JsonResponse(null, 404);
 }
-else {
-    $apiate->sendResponse(new JsonResponse(null, 404));
-}
+
+$apiate->sendResponse($response);
 
 exit();
