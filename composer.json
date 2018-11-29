@@ -1,0 +1,16 @@
+{
+  "name": "isize1ce/apiate",
+  "description": "Lightweight HTTP microframework",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Pavel Leschev",
+      "email": "isize1ce@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Apiate\\": "src/"
+    }
+  }
+}

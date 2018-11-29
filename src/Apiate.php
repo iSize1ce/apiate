@@ -4,6 +4,10 @@ namespace Apiate;
 
 class Apiate
 {
+    /**
+     * @var RouteCollection
+     */
+    private $routes;
 
     /**
      * Apiate constructor.
@@ -12,9 +16,9 @@ class Apiate
     {
     }
 
-    public function getRoutes(): RouteCollection
+    public function getRoutes(): RouteProvider
     {
-
+        return new RouteProvider('', $this->routes);
     }
 
     public function handle(Request $request): void

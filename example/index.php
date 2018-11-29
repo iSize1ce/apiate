@@ -1,17 +1,19 @@
 <?php
 
-use Apiate\{Apiate, ClosureHandler, JsonResponse, Request, RouteCollection};
+include_once __DIR__ . '/../vendor/autoload.php';
+
+use Apiate\{Apiate, ClosureHandler, JsonResponse, Request, RouteProvider};
 
 $app = new Apiate();
 
 $routes = $app->getRoutes();
 
-$routes->createNamespace('/api', function (RouteCollection $apiRoutes) {
+$routes->createNamespace('/api', function (RouteProvider $apiRoutes) {
     $apiRoutes->get('/', new ClosureHandler(function () {
         return new JsonResponse('Hello API!');
     }));
 
-    $apiRoutes->createNamespace('/news', function (RouteCollection $newsRoutes) {
+    $apiRoutes->createNamespace('/news', function (RouteProvider $newsRoutes) {
         $newsRoutes->get('/', new ClosureHandler(function () {
             return new JsonResponse([
                 ['id' => 1, 'text' => 'News #1'],
@@ -30,6 +32,9 @@ $routes->createNamespace('/api', function (RouteCollection $apiRoutes) {
         }));
     });
 });
+
+var_dump($app);
+die;
 
 $request = Request::createFromGlobals();
 
