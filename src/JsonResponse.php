@@ -6,5 +6,6 @@ class JsonResponse
 {
     public function __construct($body)
     {
+        // TODO
     }
 }

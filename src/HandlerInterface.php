@@ -5,5 +5,5 @@ namespace Apiate;
 
 interface HandlerInterface
 {
-
+// TODO
 }

@@ -21,6 +21,6 @@ class Apiate
 
     public function handle(Request $request): void
     {
-
+        // TODO
     }
 }
