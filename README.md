@@ -1,3 +1,8 @@
+# Apiate
+
+## Example
+
+```php
 <?php
 
 use Apiate\Apiate;
@@ -43,3 +48,4 @@ $request = Request::createFromGlobals();
 $app->handle($request);
 
 die();
+```
