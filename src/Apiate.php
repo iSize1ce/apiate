@@ -2,6 +2,10 @@
 
 namespace Apiate;
 
+use Apiate\Route\Route;
+use Apiate\Route\RouteCollection;
+use Apiate\Route\RouteProvider;
+
 class Apiate
 {
     /**

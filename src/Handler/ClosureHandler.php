@@ -1,6 +1,10 @@
 <?php
 
-namespace Apiate;
+namespace Apiate\Handler;
+
+use Apiate\Handler\HandlerInterface;
+use Apiate\Request;
+use Apiate\Response;
 
 class ClosureHandler implements HandlerInterface
 {

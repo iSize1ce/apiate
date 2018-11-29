@@ -1,7 +1,8 @@
 <?php
 
-namespace Apiate;
+namespace Apiate\Route;
 
+use Apiate\Route\Route;
 use Traversable;
 
 class RouteCollection implements \IteratorAggregate

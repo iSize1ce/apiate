@@ -1,6 +1,8 @@
 <?php
 
-namespace Apiate;
+namespace Apiate\Route;
+
+use Apiate\Handler\HandlerInterface;
 
 class Route
 {

@@ -1,6 +1,11 @@
 <?php
 
-namespace Apiate;
+namespace Apiate\Route;
+
+use Apiate\Handler\HandlerInterface;
+use Apiate\Request;
+use Apiate\Route\Route;
+use Apiate\Route\RouteCollection;
 
 class RouteProvider
 {
