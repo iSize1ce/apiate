@@ -25,6 +25,7 @@ class Apiate
 
     public function handle(Request $request): void
     {
+        $matchedRoute = null;
         foreach ($this->routes as $route) {
             if ($route->getMethod() !== $request->getMethod()) {
                 continue;
@@ -43,6 +44,10 @@ class Apiate
             }
         }
 
-        $response = $matchedRoute->getHandler()->handle($request);
+        if ($matchedRoute) {
+            $response = $matchedRoute->getHandler()->handle($request);
+        } else {
+            // TODO
+        }
     }
 }

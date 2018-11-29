@@ -2,7 +2,6 @@
 
 namespace Apiate\Handler;
 
-use Apiate\Handler\HandlerInterface;
 use Apiate\Request;
 use Apiate\Response;
 
@@ -20,6 +19,8 @@ class ClosureHandler implements HandlerInterface
 
     public function handle(Request $request): Response
     {
-        return $this->closure($request);
+        $closure = $this->closure;
+
+        return $closure($request);
     }
 }

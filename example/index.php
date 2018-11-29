@@ -1,8 +1,12 @@
 <?php
 
+use Apiate\Apiate;
+use Apiate\Handler\ClosureHandler;
+use Apiate\JsonResponse;
+use Apiate\Route\RouteProvider;
+
 include_once __DIR__ . '/../vendor/autoload.php';
 
-use Apiate\{Apiate, Handler\ClosureHandler, JsonResponse, Request, Route\RouteProvider};
 
 $app = new Apiate();
 
