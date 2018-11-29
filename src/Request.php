@@ -34,6 +34,11 @@ class Request
      */
     private $method;
 
+    /**
+     * @var Parameters
+     */
+    private $uriParameters;
+
     public static function createFromGlobals(): self
     {
         return new self();
@@ -57,5 +62,10 @@ class Request
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function getUriParameters()
+    {
+        return $this->uriParameters;
     }
 }
