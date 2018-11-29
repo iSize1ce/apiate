@@ -15,26 +15,26 @@ class Request
     const METHOD_PUT = 'PUT';
 
     /**
-     * @var ImmutableParams
+     * @var Parameters
      */
     private $post;
 
     /**
-     * @var ImmutableParams
+     * @var Parameters
      */
     private $query;
 
     public static function createFromGlobals(): self
     {
-        // TODO
+        return new self();
     }
 
-    public function getPost(): ImmutableParams
+    public function getPost(): Parameters
     {
         return $this->post;
     }
 
-    public function getQuery(): ImmutableParams
+    public function getQuery(): Parameters
     {
         return $this->query;
     }
