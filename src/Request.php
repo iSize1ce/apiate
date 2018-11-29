@@ -24,6 +24,16 @@ class Request
      */
     private $query;
 
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $method;
+
     public static function createFromGlobals(): self
     {
         return new self();
@@ -37,5 +47,15 @@ class Request
     public function getQuery(): Parameters
     {
         return $this->query;
+    }
+
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
     }
 }
