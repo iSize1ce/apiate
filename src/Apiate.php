@@ -9,11 +9,9 @@ class Apiate
      */
     private $routes;
 
-    /**
-     * Apiate constructor.
-     */
     public function __construct()
     {
+        $this->routes = new RouteCollection();
     }
 
     public function getRoutes(): RouteProvider
