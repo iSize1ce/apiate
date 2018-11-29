@@ -27,7 +27,7 @@ $routes->createNamespace('/api', function (RouteProvider $apiRoutes) {
             );
         }));
 
-        $newsRoutes->get('/{/<id>(\d+)/}', new ClosureHandler(function (int $id) {
+        $newsRoutes->get('/{id=\d+}', new ClosureHandler(function (int $id) {
             return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
         }));
     });

@@ -5,7 +5,7 @@ namespace Apiate;
 class Apiate
 {
     /**
-     * @var RouteCollection
+     * @var RouteCollection|Route[]
      */
     private $routes;
 
@@ -21,6 +21,24 @@ class Apiate
 
     public function handle(Request $request): void
     {
-        // TODO
+        foreach ($this->routes as $route) {
+            if ($route->getMethod() !== $request->getMethod()) {
+                continue;
+            }
+
+            $routePath = $route->getPath();
+
+            if (strpos($routePath, '{') === false && strpos($routePath, '}') === false) {
+                if ($routePath === $request->getPath()) {
+                    $matchedRoute = $route;
+
+                    break;
+                }
+            } else {
+                // TODO
+            }
+        }
+
+        $response = $matchedRoute->getHandler()->handle($request);
     }
 }

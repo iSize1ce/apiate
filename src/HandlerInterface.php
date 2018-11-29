@@ -2,8 +2,7 @@
 
 namespace Apiate;
 
-
 interface HandlerInterface
 {
-// TODO
+    public function handle(Request $request): Response;
 }
