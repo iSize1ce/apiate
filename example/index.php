@@ -2,9 +2,9 @@
 
 use Apiate\Apiate;
 use Apiate\Handler\ClosureHandler;
-use Apiate\JsonResponse;
-use Apiate\Request;
 use Apiate\Route\RouteProvider;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
@@ -27,12 +27,11 @@ $routes->createNamespace('/api', function (RouteProvider $apiRoutes) {
 
         $newsRoutes->post('/', new ClosureHandler(function (Request $request) {
             return new JsonResponse(
-                ['id' => 3, 'text' => $request->getPost()->get('text')]
+                ['id' => 3, 'text' => $request->request->get('text')]
             );
         }));
 
-        $newsRoutes->get('/{id=\d+}', new ClosureHandler(function (Request $request) {
-            $id = $request->getUriParameters()->get('id');
+        $newsRoutes->get('/{id=\d+}', new ClosureHandler(function (int $id) {
             return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
         }));
     });

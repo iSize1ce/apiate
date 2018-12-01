@@ -3,7 +3,7 @@
 namespace Apiate\Route;
 
 use Apiate\Handler\HandlerInterface;
-use Apiate\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class RouteProvider
 {
@@ -25,7 +25,7 @@ class RouteProvider
 
     public function createNamespace(string $path, \Closure $closure): void
     {
-        $routeProvider = new RouteProvider($path, $this->routes);
+        $routeProvider = new RouteProvider($this->path . $path, $this->routes);
         $closure($routeProvider);
     }
 

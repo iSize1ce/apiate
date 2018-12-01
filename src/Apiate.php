@@ -5,6 +5,7 @@ namespace Apiate;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
+use Symfony\Component\HttpFoundation\Request;
 
 class Apiate
 {
@@ -25,29 +26,43 @@ class Apiate
 
     public function handle(Request $request): void
     {
+        $matchedRoute = $this->matchRoute($request);
+
+        var_dump($matchedRoute);
+
+        if (!$matchedRoute) {
+            throw new \Exception('Route not found');
+        }
+
+        $response = $matchedRoute->getHandler()->handle($request);
+
+        $response->prepare($request);
+        $response->send();
+    }
+
+    private function matchRoute(Request $request)
+    {
+        $requestPath = $request->getPathInfo();
+        $requestMethod = $request->getMethod();
+
         $matchedRoute = null;
         foreach ($this->routes as $route) {
-            if ($route->getMethod() !== $request->getMethod()) {
+            if ($route->getMethod() !== $requestMethod) {
                 continue;
             }
 
             $routePath = $route->getPath();
 
             if (strpos($routePath, '{') === false && strpos($routePath, '}') === false) {
-                if ($routePath === $request->getPath()) {
-                    $matchedRoute = $route;
-
-                    break;
+                if ($routePath === $requestPath) {
+                    return $route;
                 }
             } else {
-                // TODO
+                $regexPath = preg_replace(['/{[a-z0-9]+}/i', '/{[a-z0-9]+=(.*)}/Ui'], [], $routePath);
+                $regexResult = preg_match('/^' . $regexPath . '&/U', $requestPath, $regexMatches);
             }
         }
 
-        if ($matchedRoute) {
-            $response = $matchedRoute->getHandler()->handle($request);
-        } else {
-            // TODO
-        }
+        return null;
     }
 }

@@ -12,5 +12,8 @@
     "psr-4": {
       "Apiate\\": "src/"
     }
+  },
+  "require": {
+    "symfony/http-foundation": "^4.2"
   }
 }
