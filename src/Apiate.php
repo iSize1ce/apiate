@@ -6,6 +6,7 @@ use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class Apiate
 {
@@ -13,6 +14,16 @@ class Apiate
      * @var RouteCollection|Route[]
      */
     private $routes;
+
+    /**
+     * @var \Closure[]
+     */
+    private $beforeMiddleware;
+
+    /**
+     * @var \Closure[]
+     */
+    private $afterMiddleware;
 
     public function __construct()
     {
@@ -26,9 +37,17 @@ class Apiate
 
     public function handle(Request $request): void
     {
-        $matchedRoute = $this->matchRoute($request);
+        foreach ($this->beforeMiddleware as $before) {
+            $responseFromBefore = $before($request);
 
-        var_dump($matchedRoute);
+            if ($responseFromBefore instanceof Response) {
+                $this->sendResponse($responseFromBefore);
+
+                return;
+            }
+        }
+
+        $matchedRoute = $this->matchRoute($request);
 
         if (!$matchedRoute) {
             throw new \Exception('Route not found');
@@ -36,11 +55,20 @@ class Apiate
 
         $response = $matchedRoute->getHandler()->handle($request);
 
-        $response->prepare($request);
-        $response->send();
+        foreach ($this->afterMiddleware as $after) {
+            $responseFromAfter = $after($request);
+
+            if ($responseFromAfter instanceof Response) {
+                $this->sendResponse($responseFromAfter);
+
+                return;
+            }
+        }
+
+        $this->sendResponse($response);
     }
 
-    private function matchRoute(Request $request)
+    private function matchRoute(Request $request): ?Route
     {
         $requestPath = $request->getPathInfo();
         $requestMethod = $request->getMethod();
@@ -64,5 +92,28 @@ class Apiate
         }
 
         return null;
+    }
+
+    public function before(\Closure $closure, ?int $weight = null)
+    {
+        $this->beforeMiddleware[$weight] = $closure();
+
+        return $this;
+    }
+
+    public function after(\Closure $closure, ?int $weight = null)
+    {
+        $this->afterMiddleware[$weight] = $closure();
+
+        return $this;
+    }
+
+    public function sendResponse(Response $response, ?Request $request = null)
+    {
+        if ($request !== null) {
+            $response->prepare($request);
+        }
+
+        $response->send();
     }
 }

@@ -5,10 +5,17 @@ use Apiate\Handler\ClosureHandler;
 use Apiate\Route\RouteProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new Apiate();
+
+set_exception_handler(function (Exception $exception) use ($app) {
+    $app->sendResponse(new JsonResponse($exception->getMessage()));
+
+    die();
+});
 
 $routes = $app->getRoutes();
 
@@ -35,6 +42,20 @@ $routes->createNamespace('/api', function (RouteProvider $apiRoutes) {
             return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
         }));
     });
+});
+
+$app->before(function (Request $request) {
+    if ($request->getClientIp() !== '127.0.0.1') {
+        return new JsonResponse(null, 403);
+    }
+});
+
+$app->after(function (Request $request, Response $response) {
+    if ($request->isMethod('GET')) {
+        return new JsonResponse();
+    }
+
+    $response->setMaxAge(123);
 });
 
 
