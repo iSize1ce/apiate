@@ -81,12 +81,11 @@ class Apiate
 
             $routePath = $route->getPath();
 
-            $test1 = preg_replace('/{([a-z]+)}/Ui', '(?<$1>.*)', $routePath);
-            $test2 = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $test1);
+            $routePathRegex = preg_replace('/{([a-z]+)}/Ui', '(?<$1>.*)', $routePath);
+            $routePathRegex = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $routePathRegex);
+            $routePathRegex = str_replace('/', '\/', $routePathRegex);
 
-            $requestPathRegex = str_replace('/', '\/', $test2);
-
-            if (preg_match_all('/^' . $requestPathRegex . '$/Ui', $requestPath) === 1) {
+            if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath) === 1) {
                 return $route;
             }
         }
