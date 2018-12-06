@@ -11,8 +11,8 @@ include_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new Apiate();
 
-set_exception_handler(function (Exception $exception) use ($app) {
-    $app->sendResponse(new JsonResponse($exception->getMessage()));
+set_exception_handler(function (Throwable $exception) use ($app) {
+    $app->sendResponse(new JsonResponse('Error: ' . $exception->getMessage()));
 
     die();
 });
@@ -38,24 +38,26 @@ $routes->createNamespace('/api', function (RouteProvider $apiRoutes) {
             );
         }));
 
-        $newsRoutes->get('/{id=\d+}', new ClosureHandler(function (int $id) {
-            return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
+        $newsRoutes->get('/{id=\d+}', new ClosureHandler(function (Request $request) {
+            return new JsonResponse(['id' => 123, 'text' => "News #123"]);
+        }));
+
+        $newsRoutes->get('/{parameterOne}/{parameterTwo}', new ClosureHandler(function (Request $request) {
+            return new JsonResponse('hi');
         }));
     });
 });
 
 $app->before(function (Request $request) {
-    if ($request->getClientIp() !== '127.0.0.1') {
-        return new JsonResponse(null, 403);
-    }
+    // @todo
 });
 
 $app->after(function (Request $request, Response $response) {
-    if ($request->isMethod('GET')) {
-        return new JsonResponse();
-    }
+    if ($response instanceof JsonResponse) {
+        $data = json_decode($response->getContent());
 
-    $response->setMaxAge(123);
+        $response->setData(['status' => true, 'result' => $data]);
+    }
 });
 
 

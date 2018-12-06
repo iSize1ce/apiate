@@ -50,13 +50,13 @@ class Apiate
         $matchedRoute = $this->matchRoute($request);
 
         if (!$matchedRoute) {
-            throw new \Exception('Route not found');
+            throw new RouteNotFoundException();
         }
 
         $response = $matchedRoute->getHandler()->handle($request);
 
         foreach ($this->afterMiddleware as $after) {
-            $responseFromAfter = $after($request);
+            $responseFromAfter = $after($request, $response);
 
             if ($responseFromAfter instanceof Response) {
                 $this->sendResponse($responseFromAfter);
@@ -81,13 +81,13 @@ class Apiate
 
             $routePath = $route->getPath();
 
-            if (strpos($routePath, '{') === false && strpos($routePath, '}') === false) {
-                if ($routePath === $requestPath) {
-                    return $route;
-                }
-            } else {
-                $regexPath = preg_replace(['/{[a-z0-9]+}/i', '/{[a-z0-9]+=(.*)}/Ui'], [], $routePath);
-                $regexResult = preg_match('/^' . $regexPath . '&/U', $requestPath, $regexMatches);
+            $test1 = preg_replace('/{([a-z]+)}/Ui', '(?<$1>.*)', $routePath);
+            $test2 = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $test1);
+
+            $requestPathRegex = str_replace('/', '\/', $test2);
+
+            if (preg_match_all('/^' . $requestPathRegex . '$/Ui', $requestPath) === 1) {
+                return $route;
             }
         }
 
@@ -96,14 +96,14 @@ class Apiate
 
     public function before(\Closure $closure, ?int $weight = null)
     {
-        $this->beforeMiddleware[$weight] = $closure();
+        $this->beforeMiddleware[$weight] = $closure;
 
         return $this;
     }
 
     public function after(\Closure $closure, ?int $weight = null)
     {
-        $this->afterMiddleware[$weight] = $closure();
+        $this->afterMiddleware[$weight] = $closure;
 
         return $this;
     }
