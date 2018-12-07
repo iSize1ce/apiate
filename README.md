@@ -86,7 +86,7 @@ new ClosureHandler(Controller::class, 'methodName');
 
 + `RouteHandler`
 ```php
-class RouteController extends Route {
+class MyRequestHandler implements RouteRequestHandler {
     public function __construct(Request $request) {
         $this->text = $request->request->get('text', 'empty');
     }
