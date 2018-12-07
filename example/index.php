@@ -1,7 +1,7 @@
 <?php
 
-use Apiate\{Apiate, Handler\ClosureHandler, Route\RouteProvider};
-use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
+use Apiate\{Apiate, Request, Handler\ClosureHandler, Route\RouteProvider};
+use Symfony\Component\HttpFoundation\{JsonResponse, Response};
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
@@ -35,7 +35,7 @@ $routes->createNamespace('/news', function (RouteProvider $newsRoutes) {
 
     $newsRoutes->createNamespace('/{id=\d+}', function (RouteProvider $newsWithIdRoutes) {
         $newsWithIdRoutes->get('/', new ClosureHandler(function (Request $request) {
-            $id = null; // @todo uri parameters
+            $id = (int)$request->uriParameters->get('id');
             return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
         }));
 

@@ -5,7 +5,6 @@ namespace Apiate;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Apiate
@@ -85,7 +84,13 @@ class Apiate
             $routePathRegex = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $routePathRegex);
             $routePathRegex = str_replace('/', '\/', $routePathRegex);
 
-            if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath) === 1) {
+            if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath, $matches) === 1) {
+                foreach ($matches as $key => $match) {
+                    if (is_string($key)) {
+                        $request->uriParameters->set($key, $match[0]);
+                    }
+                }
+
                 return $route;
             }
         }
