@@ -86,7 +86,7 @@ new ClosureHandler(Controller::class, 'methodName');
 
 + `RouteHandler`
 ```php
-class RouteController {
+class RouteController extends Route {
     public function __construct(Request $request) {
         $this->text = $request->request->get('text', 'empty');
     }
@@ -101,8 +101,8 @@ new ClosureHandler(RouteController::class);
 ## Namespaces
 ```php
 $routeProvider->namespace('/path', function(RequestProvider $pathRoutes) {
-    // $pathRoutes->get('/', SomeHandler);
-    // $pathRoutes->post('/', SomeHandler);
+    $pathRoutes->get('/', SomeHandler);
+    $pathRoutes->post('/', SomeHandler);
     
     $routeProvider->namespace('/anotherPath', function(RequestProvider $pathRoutes) {
         $pathRoutes->put('/', SomeHandler);
