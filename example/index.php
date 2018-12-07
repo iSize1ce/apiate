@@ -8,7 +8,7 @@ include_once __DIR__ . '/../vendor/autoload.php';
 $app = new Apiate();
 
 set_exception_handler(function (Throwable $exception) use ($app) {
-    $app->sendResponse(new JsonResponse('Error: ' . $exception->getMessage()));
+    $app->sendResponse(new JsonResponse(['status' => false, 'result' => $exception->getMessage()]));
 
     die();
 });
