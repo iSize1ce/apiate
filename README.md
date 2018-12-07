@@ -1,37 +1,6 @@
 # Apiate
 
-## RouteProvider
-
-+ `get(string $path, HandlerInterface $handler): void`
-+ `post(string $path, HandlerInterface $handler): void`
-+ `delete(string $path, HandlerInterface $handler): void`
-+ `put(string $path, HandlerInterface $handler): void`
-+ `handle(string $method, string $path, HandlerInterface $handler): void`
-
-## HandlerInterface
-
-+ `ClosureHandler`
 ```php
-new ClosureHandler(function(Request $request) {
-    return new Response();
-}));
-```
-+ `ControllerHandler`
-```php
-new ClosureHandler(Controller::class, 'methodName');
-```
-
-## Namespaces
-```php
-$routeProvider->namespace('/path', function(RequestProvider $pathRoutes) {
-    // $pathRoutes->get('/', SomeHandler);
-}));
-```
-## Example
-
-```php
-<?php
-
 use Apiate\{Apiate, Request, Handler\ClosureHandler, Route\RouteProvider};
 use Symfony\Component\HttpFoundation\{JsonResponse, Response};
 
@@ -94,4 +63,55 @@ $request = Request::createFromGlobals();
 $app->handle($request);
 
 die();
+```
+
+## Request Handlers
+
++ `ClosureHandler`
+```php
+new ClosureHandler(function(Request $request) {
+    return new Response();
+}));
+```
+
++ `ControllerHandler`
+```php
+class Controller {
+    public function methodName(Request $request) {
+        return new Response('Hello World!');
+    }
+}
+new ClosureHandler(Controller::class, 'methodName');
+```
+
++ `RouteHandler`
+```php
+class RouteController {
+    public function __construct(Request $request) {
+        $this->text = $request->request->get('text', 'empty');
+    }
+    
+    public function handle() {
+        return new Response('Hello World!');
+    }
+}
+new ClosureHandler(RouteController::class);
+```
+
+## Namespaces
+```php
+$routeProvider->namespace('/path', function(RequestProvider $pathRoutes) {
+    // $pathRoutes->get('/', SomeHandler);
+    // $pathRoutes->post('/', SomeHandler);
+    
+    $routeProvider->namespace('/anotherPath', function(RequestProvider $pathRoutes) {
+        $pathRoutes->put('/', SomeHandler);
+        $pathRoutes->delete('/', SomeHandler);
+    }
+}));
+```
+
+## Path regex
+```php
+$routeProvider->get('/api/{uriParameterNameWithRegex=\d+}/{randomUriParameterWithoutRegex}', SomeHandler);
 ```
