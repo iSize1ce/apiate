@@ -1,11 +1,7 @@
 <?php
 
-use Apiate\Apiate;
-use Apiate\Handler\ClosureHandler;
-use Apiate\Route\RouteProvider;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\{Apiate, Handler\ClosureHandler, Route\RouteProvider};
+use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
@@ -19,31 +15,32 @@ set_exception_handler(function (Throwable $exception) use ($app) {
 
 $routes = $app->getRoutes();
 
-$routes->createNamespace('/api', function (RouteProvider $apiRoutes) {
-    $apiRoutes->get('/', new ClosureHandler(function () {
-        return new JsonResponse('Hello API!');
+$routes->get('/', new ClosureHandler(function () {
+    return new JsonResponse('Hello world!');
+}));
+
+$routes->createNamespace('/news', function (RouteProvider $newsRoutes) {
+    $newsRoutes->get('/', new ClosureHandler(function () {
+        return new JsonResponse([
+            ['id' => 1, 'text' => 'News #1'],
+            ['id' => 2, 'text' => 'News #2']
+        ]);
     }));
 
-    $apiRoutes->createNamespace('/news', function (RouteProvider $newsRoutes) {
-        $newsRoutes->get('/', new ClosureHandler(function () {
-            return new JsonResponse([
-                ['id' => 1, 'text' => 'News #1'],
-                ['id' => 2, 'text' => 'News #2']
-            ]);
+    $newsRoutes->post('/', new ClosureHandler(function (Request $request) {
+        return new JsonResponse(
+            ['id' => 3, 'text' => $request->request->get('text')]
+        );
+    }));
+
+    $newsRoutes->createNamespace('/{id=\d+}', function (RouteProvider $newsWithIdRoutes) {
+        $newsWithIdRoutes->get('/', new ClosureHandler(function (Request $request) {
+            $id = null; // @todo uri parameters
+            return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
         }));
 
-        $newsRoutes->post('/', new ClosureHandler(function (Request $request) {
-            return new JsonResponse(
-                ['id' => 3, 'text' => $request->request->get('text')]
-            );
-        }));
-
-        $newsRoutes->get('/{id=\d+}', new ClosureHandler(function (Request $request) {
-            return new JsonResponse(['id' => 123, 'text' => "News #123"]);
-        }));
-
-        $newsRoutes->get('/{parameterOne}/{parameterTwo}', new ClosureHandler(function (Request $request) {
-            return new JsonResponse('hi');
+        $newsWithIdRoutes->put('/', new ClosureHandler(function (Request $request) {
+            return new JsonResponse(['id' => 4, 'text' => $request->request->get('text')]);
         }));
     });
 });
@@ -59,7 +56,6 @@ $app->after(function (Request $request, Response $response) {
         $response->setData(['status' => true, 'result' => $data]);
     }
 });
-
 
 $request = Request::createFromGlobals();
 
