@@ -1,5 +1,32 @@
 # Apiate
 
+## RouteProvider
+
++ `get(string $path, HandlerInterface $handler): void`
++ `post(string $path, HandlerInterface $handler): void`
++ `delete(string $path, HandlerInterface $handler): void`
++ `put(string $path, HandlerInterface $handler): void`
++ `handle(string $method, string $path, HandlerInterface $handler): void`
+
+## HandlerInterface
+
++ `ClosureHandler`
+```php
+new ClosureHandler(function(Request $request) {
+    return new Response();
+}));
+```
++ `ControllerHandler`
+```php
+new ClosureHandler(Controller::class, 'methodName');
+```
+
+## Namespaces
+```php
+$routeProvider->namespace('/path', function(RequestProvider $pathRoutes) {
+    // $pathRoutes->get('/', SomeHandler);
+}));
+```
 ## Example
 
 ```php

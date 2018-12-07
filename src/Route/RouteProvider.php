@@ -29,27 +29,27 @@ class RouteProvider
         $closure($routeProvider);
     }
 
-    public function get(string $path, HandlerInterface $handler)
+    public function get(string $path, HandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_GET, $path, $handler);
     }
 
-    public function post(string $path, HandlerInterface $handler)
+    public function post(string $path, HandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_POST, $path, $handler);
     }
 
-    public function delete(string $path, HandlerInterface $handler)
+    public function delete(string $path, HandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_DELETE, $path, $handler);
     }
 
-    public function put(string $path, HandlerInterface $handler)
+    public function put(string $path, HandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_PUT, $path, $handler);
     }
 
-    public function handle(string $method, string $path, HandlerInterface $handler)
+    public function handle(string $method, string $path, HandlerInterface $handler): void
     {
         $this->routes->add(
             new Route($method, $this->path . $path, $handler)
