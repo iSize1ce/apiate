@@ -28,25 +28,16 @@ class Route
         $this->handler = $handler;
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @return HandlerInterface
-     */
     public function getHandler(): HandlerInterface
     {
         return $this->handler;

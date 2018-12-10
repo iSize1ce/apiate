@@ -2,10 +2,8 @@
 
 namespace Apiate;
 
-use Apiate\Route\Route;
-use Apiate\Route\RouteCollection;
-use Apiate\Route\RouteProvider;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\HTTP\{Request, Response};
+use Apiate\Route\{Route, RouteCollection, RouteProvider};
 
 class Apiate
 {
@@ -17,12 +15,12 @@ class Apiate
     /**
      * @var \Closure[]
      */
-    private $beforeMiddleware;
+    private $beforeMiddleware = [];
 
     /**
      * @var \Closure[]
      */
-    private $afterMiddleware;
+    private $afterMiddleware = [];
 
     public function __construct()
     {
@@ -48,7 +46,7 @@ class Apiate
 
         $matchedRoute = $this->matchRoute($request);
 
-        if (!$matchedRoute) {
+        if ($matchedRoute === null) {
             throw new RouteNotFoundException();
         }
 
@@ -69,7 +67,7 @@ class Apiate
 
     private function matchRoute(Request $request): ?Route
     {
-        $requestPath = $request->getPathInfo();
+        $requestPath = $request->getUriPath();
         $requestMethod = $request->getMethod();
 
         $matchedRoute = null;
@@ -87,7 +85,7 @@ class Apiate
             if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath, $matches) === 1) {
                 foreach ($matches as $key => $match) {
                     if (is_string($key)) {
-                        $request->uriParameters->set($key, $match[0]);
+                        $request->getUriParameters()->offsetSet($key, $match[0]);
                     }
                 }
 
@@ -114,10 +112,6 @@ class Apiate
 
     public function sendResponse(Response $response, ?Request $request = null)
     {
-        if ($request !== null) {
-            $response->prepare($request);
-        }
-
         $response->send();
     }
 }

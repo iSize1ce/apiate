@@ -2,8 +2,7 @@
 
 namespace Apiate\Handler;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\HTTP\{Request, Response};
 
 class ClosureHandler implements HandlerInterface
 {
