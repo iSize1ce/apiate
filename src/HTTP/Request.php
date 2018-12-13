@@ -32,6 +32,11 @@ class Request
     /**
      * @var Parameters
      */
+    private $files;
+
+    /**
+     * @var Parameters
+     */
     private $cookies;
 
     /**
@@ -39,13 +44,15 @@ class Request
      */
     private $uriParameters;
 
-    public function __construct(string $method, string $uri, string $protocolVersion, Parameters $headers, Parameters $cookies)
+    public function __construct(string $method, string $uri, string $protocolVersion, Parameters $headers, Parameters $files, Parameters $cookies)
     {
         $this->method = $method;
         $this->uriPath = $uri;
         $this->protocolVersion = $protocolVersion;
         $this->headers = $headers;
+        $this->files = $files;
         $this->cookies = $cookies;
+
         $this->uriParameters = new Parameters();
     }
 
@@ -69,11 +76,17 @@ class Request
             $cookies->offsetSet($key, $value);
         }
 
+        $files = new Parameters();
+        foreach ($_FILES as $key => $value) {
+            $cookies->offsetSet($key, $value);
+        }
+
         return new self(
             $method,
             $uri,
             $protocol,
             $headers,
+            $files,
             $cookies
         );
     }
@@ -97,6 +110,11 @@ class Request
     public function getHeaders(): Parameters
     {
         return $this->headers;
+    }
+
+    public function getFiles(): Parameters
+    {
+        return $this->files;
     }
 
     public function getCookies(): Parameters
