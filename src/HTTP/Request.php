@@ -78,7 +78,7 @@ class Request
 
         $files = new Parameters();
         foreach ($_FILES as $key => $value) {
-            $cookies->offsetSet($key, $value);
+            $files->offsetSet($key, $value);
         }
 
         return new self(

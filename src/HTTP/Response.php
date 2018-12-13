@@ -32,7 +32,7 @@ class Response
             $cookies[] = "$name=$value";
         }
         if (count($cookies) > 0) {
-            header('Cookie: ' . implode(';', $cookies));
+            header('Set-Cookie: ' . implode(';', $cookies));
         }
 
         foreach ($this->getHeaders() as $name => $value) {
