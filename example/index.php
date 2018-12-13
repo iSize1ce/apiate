@@ -15,6 +15,7 @@ $routes->get('/', new ClosureHandler(function (Request $request) {
         'uriParameters' => $request->getUriParameters()->getArrayCopy(),
         'headers' => $request->getHeaders()->getArrayCopy(),
         'cookies' => $request->getCookies()->getArrayCopy(),
+        'files' => $request->getFiles()->getArrayCopy()
     ]);
 }));
 
