@@ -7,9 +7,9 @@ use Apiate\Handler\HandlerInterface;
 class Route
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $method;
+    private $methods;
 
     /**
      * @var string
@@ -21,16 +21,22 @@ class Route
      */
     private $handler;
 
-    public function __construct(string $method, string $path, HandlerInterface $handler)
+    /**
+     * @param string[] $methods
+     */
+    public function __construct(array $methods, string $path, HandlerInterface $handler)
     {
-        $this->method = $method;
+        $this->methods = $methods;
         $this->path = $path;
         $this->handler = $handler;
     }
 
-    public function getMethod(): string
+    /**
+     * @return string[]
+     */
+    public function getMethods(): array
     {
-        return $this->method;
+        return $this->methods;
     }
 
     public function getPath(): string

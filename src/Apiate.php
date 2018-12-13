@@ -72,7 +72,7 @@ class Apiate
 
         $matchedRoute = null;
         foreach ($this->routes as $route) {
-            if ($route->getMethod() !== $requestMethod) {
+            if (!in_array($requestMethod, $route->getMethods())) {
                 continue;
             }
 
