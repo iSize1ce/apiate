@@ -8,7 +8,11 @@ class JsonResponse extends Response
 
     public function __construct($data)
     {
+        parent::__construct();
+
         $this->data = $data;
         $this->body = json_encode($data);
+
+        $this->getHeaders()->offsetSet('Content-Type', 'application/json');
     }
 }
