@@ -52,7 +52,7 @@ class RouteProvider
     /**
      * @param string[] $methods
      */
-    public function handle(array $methods, string $path, HandlerInterface $handler): void
+    public function handle(string $path, array $methods, HandlerInterface $handler): void
     {
         $this->routes->add(
             new Route($methods, $this->path . $path, $handler)
