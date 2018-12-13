@@ -77,7 +77,6 @@ class Apiate
             }
 
             $routePath = $route->getPath();
-
             $routePathRegex = preg_replace('/{([a-z]+)}/Ui', '(?<$1>.*)', $routePath);
             $routePathRegex = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $routePathRegex);
             $routePathRegex = str_replace('/', '\/', $routePathRegex);
