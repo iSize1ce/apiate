@@ -11,7 +11,7 @@ class JsonResponse extends Response
         parent::__construct();
 
         $this->data = $data;
-        $this->body = json_encode($data);
+        $this->setBody(json_encode($data));
 
         $this->getHeaders()->offsetSet('Content-Type', 'application/json');
     }

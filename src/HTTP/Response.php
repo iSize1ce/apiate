@@ -7,7 +7,7 @@ class Response
     /**
      * @var string
      */
-    protected $body;
+    private $body;
 
     /**
      * @var Parameters
@@ -26,6 +26,16 @@ class Response
         }
 
         echo $this->body;
+    }
+
+    public function setBody(string $body): void
+    {
+        $this->body = $body;
+    }
+
+    public function getBody(): ?string
+    {
+        return $this->body;
     }
 
     public function getHeaders(): Parameters
