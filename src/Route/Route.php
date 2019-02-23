@@ -4,7 +4,7 @@ namespace Apiate\Route;
 
 use Apiate\RouteHandler\RouteHandlerInterface;
 
-class Route
+class Route implements RouteInterface
 {
     /**
      * @var string
