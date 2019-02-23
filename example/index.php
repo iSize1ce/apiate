@@ -1,6 +1,6 @@
 <?php
 
-use Apiate\{Apiate, Request, Handler\ClosureHandler, Route\RouteProvider};
+use Apiate\{Apiate, Request, RouteHandler\ClosureRouteHandler, Route\RouteProvider};
 use Symfony\Component\HttpFoundation\{JsonResponse, Response};
 
 include_once __DIR__ . '/../vendor/autoload.php';
@@ -15,31 +15,31 @@ set_exception_handler(function (Throwable $exception) use ($app) {
 
 $routes = $app->getRoutes();
 
-$routes->get('/', new ClosureHandler(function () {
+$routes->get('/', new ClosureRouteHandler(function () {
     return new JsonResponse('Hello world!');
 }));
 
 $routes->createNamespace('/news', function (RouteProvider $newsRoutes) {
-    $newsRoutes->get('/', new ClosureHandler(function () {
+    $newsRoutes->get('/', new ClosureRouteHandler(function () {
         return new JsonResponse([
             ['id' => 1, 'text' => 'News #1'],
             ['id' => 2, 'text' => 'News #2']
         ]);
     }));
 
-    $newsRoutes->post('/', new ClosureHandler(function (Request $request) {
+    $newsRoutes->post('/', new ClosureRouteHandler(function (Request $request) {
         return new JsonResponse(
             ['id' => 3, 'text' => $request->request->get('text')]
         );
     }));
 
     $newsRoutes->createNamespace('/{id=\d+}', function (RouteProvider $newsWithIdRoutes) {
-        $newsWithIdRoutes->get('/', new ClosureHandler(function (Request $request) {
+        $newsWithIdRoutes->get('/', new ClosureRouteHandler(function (Request $request) {
             $id = (int)$request->uriParameters->get('id');
             return new JsonResponse(['id' => $id, 'text' => "News #$id"]);
         }));
 
-        $newsWithIdRoutes->put('/', new ClosureHandler(function (Request $request) {
+        $newsWithIdRoutes->put('/', new ClosureRouteHandler(function (Request $request) {
             return new JsonResponse(['id' => 4, 'text' => $request->request->get('text')]);
         }));
     });

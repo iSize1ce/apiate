@@ -11,7 +11,7 @@ class RouteCollection implements \IteratorAggregate
      */
     private $routes;
 
-    public function add(Route $route)
+    public function add(Route $route): void
     {
         $this->routes[] = $route;
     }

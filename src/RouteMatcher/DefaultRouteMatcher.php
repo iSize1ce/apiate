@@ -6,7 +6,7 @@ use Apiate\Request;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 
-class DefaultRouteMatcher implements \Apiate\RouteMatcher\RouteMatcherInterface
+class DefaultRouteMatcher implements RouteMatcherInterface
 {
     /**
      * @var RouteCollection|Route[]

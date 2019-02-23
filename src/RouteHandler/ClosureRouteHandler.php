@@ -1,11 +1,11 @@
 <?php
 
-namespace Apiate\Handler;
+namespace Apiate\RouteHandler;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ClosureHandler implements HandlerInterface
+class ClosureRouteHandler implements RouteHandlerInterface
 {
     /**
      * @var \Closure

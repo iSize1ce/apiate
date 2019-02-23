@@ -2,6 +2,8 @@
 
 namespace Apiate;
 
+use Apiate\ResponseSender\DefaultResponseSender;
+use Apiate\ResponseSender\ResponseSenderInterface;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
@@ -31,11 +33,17 @@ class Apiate
      */
     private $routeMatcher;
 
-    public function __construct(?RouteMatcherInterface $routeMatcher)
+    /**
+     * @var ResponseSenderInterface
+     */
+    private $responseSender;
+
+    public function __construct(?RouteMatcherInterface $routeMatcher = null, ?ResponseSenderInterface $responseSender = null)
     {
         $this->routes = new RouteCollection();
 
         $this->routeMatcher = $routeMatcher ?? new DefaultRouteMatcher($this->routes);
+        $this->responseSender = $responseSender ?? new DefaultResponseSender();
     }
 
     public function getRoutes(): RouteProvider
@@ -76,26 +84,26 @@ class Apiate
         $this->sendResponse($response);
     }
 
-    public function before(\Closure $closure, ?int $weight = null)
+    public function before(\Closure $closure, ?int $weight = null): self
     {
         $this->beforeMiddleware[$weight] = $closure;
 
         return $this;
     }
 
-    public function after(\Closure $closure, ?int $weight = null)
+    public function after(\Closure $closure, ?int $weight = null): self
     {
         $this->afterMiddleware[$weight] = $closure;
 
         return $this;
     }
 
-    public function sendResponse(Response $response, ?Request $request = null)
+    public function sendResponse(Response $response, ?Request $request = null): void
     {
         if ($request !== null) {
             $response->prepare($request);
         }
 
-        $response->send();
+        $this->responseSender->send($response);
     }
 }
