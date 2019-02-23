@@ -1,7 +1,7 @@
 <?php
 
 use Apiate\{Apiate, Request, RouteHandler\ClosureRouteHandler, Route\RouteProvider};
-use Symfony\Component\HttpFoundation\{JsonResponse, Response};
+use Symfony\Component\HttpFoundation\{JsonResponse, ParameterBag, Response};
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
@@ -46,7 +46,13 @@ $routes->createNamespace('/news', function (RouteProvider $newsRoutes) {
 });
 
 $app->before(function (Request $request) {
-    // @todo
+    $isContentTypeJson = $request->headers->get('Content-Type') === 'application/json';
+    if ($isContentTypeJson) {
+        $json = $request->getContent();
+        $decodedJson = json_decode($json, true);
+
+        $request->request = new ParameterBag($decodedJson);
+    }
 });
 
 $app->after(function (Request $request, Response $response) {
