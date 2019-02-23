@@ -63,10 +63,6 @@ class Apiate
         if ($response === null) {
             $matchedRoute = $this->routeMatcher->getRouteByRequest($request);
 
-            if ( ! $matchedRoute) {
-                throw new RouteNotFoundException();
-            }
-
             $response = $matchedRoute->getHandler()->handle($request);
         }
 

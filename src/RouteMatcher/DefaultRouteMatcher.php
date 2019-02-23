@@ -5,6 +5,7 @@ namespace Apiate\RouteMatcher;
 use Apiate\Request;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
+use Apiate\RouteNotFoundException;
 
 class DefaultRouteMatcher implements RouteMatcherInterface
 {
@@ -46,6 +47,6 @@ class DefaultRouteMatcher implements RouteMatcherInterface
             }
         }
 
-        return null;
+        throw new RouteNotFoundException();
     }
 }
