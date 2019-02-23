@@ -2,9 +2,11 @@
 
 namespace Apiate\Route;
 
+use ArrayIterator;
+use IteratorAggregate;
 use Traversable;
 
-class RouteCollection implements \IteratorAggregate
+class RouteCollection implements IteratorAggregate
 {
     /**
      * @var Route[]
@@ -18,6 +20,6 @@ class RouteCollection implements \IteratorAggregate
 
     public function getIterator(): Traversable
     {
-        return new \ArrayIterator($this->routes);
+        return new ArrayIterator($this->routes);
     }
 }
