@@ -39,10 +39,9 @@ class Apiate
      */
     private $responseSender;
 
-    public function __construct(?RouteMatcherInterface $routeMatcher = null, ?ResponseSenderInterface $responseSender = null)
+    public function __construct(?RouteCollection $routeCollection = null, ?RouteMatcherInterface $routeMatcher = null, ?ResponseSenderInterface $responseSender = null)
     {
-        $this->routes = new RouteCollection();
-
+        $this->routes = $routeCollection ?? new RouteCollection();
         $this->routeMatcher = $routeMatcher ?? new DefaultRouteMatcher($this->routes);
         $this->responseSender = $responseSender ?? new DefaultResponseSender();
     }
