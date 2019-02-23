@@ -5,6 +5,8 @@ namespace Apiate;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
+use Apiate\RouteMatcher\DefaultRouteMatcher;
+use Apiate\RouteMatcher\RouteMatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class Apiate
@@ -24,9 +26,16 @@ class Apiate
      */
     private $afterMiddleware;
 
-    public function __construct()
+    /**
+     * @var RouteMatcherInterface
+     */
+    private $routeMatcher;
+
+    public function __construct(?RouteMatcherInterface $routeMatcher)
     {
         $this->routes = new RouteCollection();
+
+        $this->routeMatcher = $routeMatcher ?? new DefaultRouteMatcher($this->routes);
     }
 
     public function getRoutes(): RouteProvider
@@ -46,7 +55,7 @@ class Apiate
             }
         }
 
-        $matchedRoute = $this->matchRoute($request);
+        $matchedRoute = $this->routeMatcher->getRouteByRequest($request);
 
         if (!$matchedRoute) {
             throw new RouteNotFoundException();
@@ -65,37 +74,6 @@ class Apiate
         }
 
         $this->sendResponse($response);
-    }
-
-    private function matchRoute(Request $request): ?Route
-    {
-        $requestPath = $request->getPathInfo();
-        $requestMethod = $request->getMethod();
-
-        $matchedRoute = null;
-        foreach ($this->routes as $route) {
-            if ($route->getMethod() !== $requestMethod) {
-                continue;
-            }
-
-            $routePath = $route->getPath();
-
-            $routePathRegex = preg_replace('/{([a-z]+)}/Ui', '(?<$1>.*)', $routePath);
-            $routePathRegex = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $routePathRegex);
-            $routePathRegex = str_replace('/', '\/', $routePathRegex);
-
-            if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath, $matches) === 1) {
-                foreach ($matches as $key => $match) {
-                    if (is_string($key)) {
-                        $request->uriParameters->set($key, $match[0]);
-                    }
-                }
-
-                return $route;
-            }
-        }
-
-        return null;
     }
 
     public function before(\Closure $closure, ?int $weight = null)
