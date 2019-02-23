@@ -9,6 +9,7 @@ use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
 use Apiate\RouteMatcher\DefaultRouteMatcher;
 use Apiate\RouteMatcher\RouteMatcherInterface;
+use Closure;
 use Symfony\Component\HttpFoundation\Response;
 
 class Apiate
@@ -19,12 +20,12 @@ class Apiate
     private $routes;
 
     /**
-     * @var \Closure[]
+     * @var Closure[]
      */
     private $beforeMiddleware;
 
     /**
-     * @var \Closure[]
+     * @var Closure[]
      */
     private $afterMiddleware;
 
@@ -53,45 +54,37 @@ class Apiate
 
     public function handle(Request $request): void
     {
+        $response = null;
+
         foreach ($this->beforeMiddleware as $before) {
-            $responseFromBefore = $before($request);
+            $response = $before($request);
+        }
 
-            if ($responseFromBefore instanceof Response) {
-                $this->sendResponse($responseFromBefore);
+        if ($response === null) {
+            $matchedRoute = $this->routeMatcher->getRouteByRequest($request);
 
-                return;
+            if ( ! $matchedRoute) {
+                throw new RouteNotFoundException();
             }
+
+            $response = $matchedRoute->getHandler()->handle($request);
         }
-
-        $matchedRoute = $this->routeMatcher->getRouteByRequest($request);
-
-        if (!$matchedRoute) {
-            throw new RouteNotFoundException();
-        }
-
-        $response = $matchedRoute->getHandler()->handle($request);
 
         foreach ($this->afterMiddleware as $after) {
-            $responseFromAfter = $after($request, $response);
-
-            if ($responseFromAfter instanceof Response) {
-                $this->sendResponse($responseFromAfter);
-
-                return;
-            }
+            $after($request, $response);
         }
 
         $this->sendResponse($response);
     }
 
-    public function before(\Closure $closure, ?int $weight = null): self
+    public function before(Closure $closure, ?int $weight = null): self
     {
         $this->beforeMiddleware[$weight] = $closure;
 
         return $this;
     }
 
-    public function after(\Closure $closure, ?int $weight = null): self
+    public function after(Closure $closure, ?int $weight = null): self
     {
         $this->afterMiddleware[$weight] = $closure;
 
@@ -100,6 +93,7 @@ class Apiate
 
     public function sendResponse(Response $response, ?Request $request = null): void
     {
+        // @TODO move to sender or remove
         if ($request !== null) {
             $response->prepare($request);
         }
