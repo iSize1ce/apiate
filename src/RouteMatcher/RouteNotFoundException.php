@@ -1,6 +1,6 @@
 <?php
 
-namespace Apiate;
+namespace Apiate\RouteMatcher;
 
 use Exception;
 
