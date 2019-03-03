@@ -2,9 +2,9 @@
 
 namespace Apiate\Route;
 
-use Apiate\Handler\HandlerInterface;
+use Apiate\RouteHandler\RouteHandlerInterface;
 
-class Route
+class Route implements RouteInterface
 {
     /**
      * @var string
@@ -17,11 +17,11 @@ class Route
     private $path;
 
     /**
-     * @var HandlerInterface
+     * @var RouteHandlerInterface
      */
     private $handler;
 
-    public function __construct(string $method, string $path, HandlerInterface $handler)
+    public function __construct(string $method, string $path, RouteHandlerInterface $handler)
     {
         $this->method = $method;
         $this->path = $path;
@@ -45,9 +45,9 @@ class Route
     }
 
     /**
-     * @return HandlerInterface
+     * @return RouteHandlerInterface
      */
-    public function getHandler(): HandlerInterface
+    public function getHandler(): RouteHandlerInterface
     {
         return $this->handler;
     }

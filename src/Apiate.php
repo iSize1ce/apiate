@@ -2,10 +2,16 @@
 
 namespace Apiate;
 
+use Apiate\HTTP\Request;
+use Apiate\HTTP\Response;
+use Apiate\ResponseSender\DefaultResponseSender;
+use Apiate\ResponseSender\ResponseSenderInterface;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\RouteMatcher\DefaultRouteMatcher;
+use Apiate\RouteMatcher\RouteMatcherInterface;
+use Closure;
 
 class Apiate
 {
@@ -15,18 +21,30 @@ class Apiate
     private $routes;
 
     /**
-     * @var \Closure[]
+     * @var Closure[]
      */
     private $beforeMiddleware;
 
     /**
-     * @var \Closure[]
+     * @var Closure[]
      */
     private $afterMiddleware;
 
-    public function __construct()
+    /**
+     * @var RouteMatcherInterface
+     */
+    private $routeMatcher;
+
+    /**
+     * @var ResponseSenderInterface
+     */
+    private $responseSender;
+
+    public function __construct(?RouteCollection $routeCollection = null, ?RouteMatcherInterface $routeMatcher = null, ?ResponseSenderInterface $responseSender = null)
     {
-        $this->routes = new RouteCollection();
+        $this->routes = $routeCollection ?? new RouteCollection();
+        $this->routeMatcher = $routeMatcher ?? new DefaultRouteMatcher($this->routes);
+        $this->responseSender = $responseSender ?? new DefaultResponseSender();
     }
 
     public function getRoutes(): RouteProvider
@@ -36,88 +54,46 @@ class Apiate
 
     public function handle(Request $request): void
     {
+        $response = null;
+
         foreach ($this->beforeMiddleware as $before) {
-            $responseFromBefore = $before($request);
-
-            if ($responseFromBefore instanceof Response) {
-                $this->sendResponse($responseFromBefore);
-
-                return;
-            }
+            $response = $before($request);
         }
 
-        $matchedRoute = $this->matchRoute($request);
+        if ($response === null) {
+            $matchedRoute = $this->routeMatcher->getRouteByRequest($request);
 
-        if (!$matchedRoute) {
-            throw new RouteNotFoundException();
+            $response = $matchedRoute->getHandler()->handle($request);
         }
-
-        $response = $matchedRoute->getHandler()->handle($request);
 
         foreach ($this->afterMiddleware as $after) {
-            $responseFromAfter = $after($request, $response);
-
-            if ($responseFromAfter instanceof Response) {
-                $this->sendResponse($responseFromAfter);
-
-                return;
-            }
+            $after($request, $response);
         }
 
         $this->sendResponse($response);
     }
 
-    private function matchRoute(Request $request): ?Route
-    {
-        $requestPath = $request->getPathInfo();
-        $requestMethod = $request->getMethod();
-
-        $matchedRoute = null;
-        foreach ($this->routes as $route) {
-            if ($route->getMethod() !== $requestMethod) {
-                continue;
-            }
-
-            $routePath = $route->getPath();
-
-            $routePathRegex = preg_replace('/{([a-z]+)}/Ui', '(?<$1>.*)', $routePath);
-            $routePathRegex = preg_replace('/{([a-z]+)=(.*)}/Ui', '(?<$1>$2)', $routePathRegex);
-            $routePathRegex = str_replace('/', '\/', $routePathRegex);
-
-            if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath, $matches) === 1) {
-                foreach ($matches as $key => $match) {
-                    if (is_string($key)) {
-                        $request->uriParameters->set($key, $match[0]);
-                    }
-                }
-
-                return $route;
-            }
-        }
-
-        return null;
-    }
-
-    public function before(\Closure $closure, ?int $weight = null)
+    public function before(Closure $closure, ?int $weight = null): self
     {
         $this->beforeMiddleware[$weight] = $closure;
 
         return $this;
     }
 
-    public function after(\Closure $closure, ?int $weight = null)
+    public function after(Closure $closure, ?int $weight = null): self
     {
         $this->afterMiddleware[$weight] = $closure;
 
         return $this;
     }
 
-    public function sendResponse(Response $response, ?Request $request = null)
+    public function sendResponse(Response $response, ?Request $request = null): void
     {
+        // @TODO move to sender or remove
         if ($request !== null) {
             $response->prepare($request);
         }
 
-        $response->send();
+        $this->responseSender->send($response);
     }
 }
