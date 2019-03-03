@@ -3,6 +3,7 @@
 namespace Apiate\ResponseSender;
 
 use Apiate\HTTP\Response;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,9 +17,9 @@ class DefaultResponseSenderTest extends TestCase
      */
     public function testSend()
     {
-        /** @var Response $response */
-        $response = $this->createMock(Response::class)
-            ->expects($this->once())
+        /** @var Response|MockObject $response */
+        $response = $this->createMock(Response::class);
+        $response->expects($this->once())
             ->method('send');
 
         $sender = new DefaultResponseSender();
