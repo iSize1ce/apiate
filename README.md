@@ -1,5 +1,7 @@
 # Apiate
 
+#### [Example](/example/index.php)
+
 ## Request Handlers
 
 + `ClosureHandler`
@@ -16,6 +18,7 @@ class Controller {
         return new Response('Hello World!');
     }
 }
+
 new ClosureHandler(Controller::class, 'methodName');
 ```
 
@@ -30,6 +33,7 @@ class MyRequestHandler implements RouteRequestHandler {
         return new Response('Hello World!');
     }
 }
+
 new ClosureHandler(RouteController::class);
 ```
 
