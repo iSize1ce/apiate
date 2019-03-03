@@ -2,30 +2,26 @@
 
 namespace Apiate\RouteHandler;
 
-use stdClass;
 use Apiate\HTTP\Request;
 use Apiate\HTTP\Response;
 
 class ControllerRouteHandler implements RouteHandlerInterface
 {
-    /**
-     * @var stdClass
-     */
-    private $controller;
+    private $controllerObject;
 
     /**
      * @var string
      */
     private $method;
 
-    public function __construct(stdClass $controller, string $method)
+    public function __construct($controllerObject, string $method)
     {
-        $this->controller = $controller;
+        $this->controllerObject = $controllerObject;
         $this->method = $method;
     }
 
     public function handle(Request $request): Response
     {
-        return $this->controller->{$this->method}($request);
+        return $this->controllerObject->{$this->method}($request);
     }
 }

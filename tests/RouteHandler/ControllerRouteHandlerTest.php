@@ -8,16 +8,20 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
+ * @covers ControllerRouteHandler
  */
 class ControllerRouteHandlerTest extends TestCase
 {
+    /**
+     * @covers ControllerRouteHandler::handle
+     */
     public function handleTest()
     {
         $request = new Request();
         $response = new Response('Test response');
 
-        $controller = $this->createMock(\stdClass::class)
-            ->expects($this->once())
+        $controller = $this->createMock(\stdClass::class);
+        $controller->expects($this->once())
             ->method('testMethod')
             ->willReturn($response);
 
