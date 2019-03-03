@@ -15,7 +15,7 @@ class ClosureRouteHandlerTest extends TestCase
     /**
      * @covers ClosureRouteHandler::handle
      */
-    public function handleTest()
+    public function testHandle()
     {
         $request = new Request();
         $response = new Response('Test response');

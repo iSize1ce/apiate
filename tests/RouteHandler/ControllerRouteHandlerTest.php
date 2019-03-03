@@ -15,7 +15,7 @@ class ControllerRouteHandlerTest extends TestCase
     /**
      * @covers ControllerRouteHandler::handle
      */
-    public function handleTest()
+    public function testHandle()
     {
         $request = new Request();
         $response = new Response('Test response');
