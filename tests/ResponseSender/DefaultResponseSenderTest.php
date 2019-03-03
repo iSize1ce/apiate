@@ -2,7 +2,7 @@
 
 namespace Apiate\ResponseSender;
 
-use Apiate\HTTP\Response;
+use Symfony\Component\HttpFoundation\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
