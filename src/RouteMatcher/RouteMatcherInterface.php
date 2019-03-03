@@ -2,7 +2,7 @@
 
 namespace Apiate\RouteMatcher;
 
-use Apiate\HTTP\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Apiate\Route\Route;
 
 interface RouteMatcherInterface

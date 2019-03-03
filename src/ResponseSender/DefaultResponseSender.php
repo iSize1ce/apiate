@@ -2,7 +2,7 @@
 
 namespace Apiate\ResponseSender;
 
-use Apiate\HTTP\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultResponseSender implements ResponseSenderInterface
 {

@@ -1,19 +1,18 @@
 <?php
 
-use Apiate\{Apiate,
-    HTTP\JSONResponse,
-    HTTP\Request,
-    HTTP\Response,
-    RouteHandler\ClosureRouteHandler,
-    Route\RouteProvider};
+use Apiate\Apiate;
+use Apiate\RouteHandler\ClosureRouteHandler;
+use Apiate\Route\RouteProvider;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new Apiate();
 
 set_exception_handler(function (Throwable $exception) use ($app) {
-    $app->sendResponse(new JSONResponse(['status' => false, 'result' => $exception->getMessage()]));
+    $app->sendResponse(new JsonResponse(['status' => false, 'result' => $exception->getMessage()]));
 
     die();
 });
@@ -40,7 +39,7 @@ $routes->createNamespace('/news', function (RouteProvider $newsRoutes) {
 
     $newsRoutes->createNamespace('/{id=\d+}', function (RouteProvider $newsWithIdRoutes) {
         $newsWithIdRoutes->get('/', new ClosureRouteHandler(function (Request $request) {
-            $id = (int)$request->uriParameters->get('id');
+            $id = (int)$request->attributes->get('id');
             return new JSONResponse(['id' => $id, 'text' => "News #$id"]);
         }));
 
@@ -61,10 +60,11 @@ $app->before(function (Request $request) {
 });
 
 $app->after(function (Request $request, Response $response) {
+    $data = json_decode($response->getContent(), true);
     if ($response instanceof JSONResponse) {
-        $response->setDecodedContent([
+        $response->setData([
             'status' => true,
-            'result' => $response->getDecodedContent()
+            'result' => $data
         ]);
     }
 });

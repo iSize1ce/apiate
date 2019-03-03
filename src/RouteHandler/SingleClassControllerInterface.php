@@ -2,8 +2,8 @@
 
 namespace Apiate\RouteHandler;
 
-use Apiate\HTTP\Request;
-use Apiate\HTTP\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 interface SingleClassControllerInterface
 {
