@@ -8,9 +8,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
+ * @covers ClosureRouteHandler
  */
 class ClosureRouteHandlerTest extends TestCase
 {
+    /**
+     * @covers ClosureRouteHandler::handle
+     */
     public function handleTest()
     {
         $request = new Request();
