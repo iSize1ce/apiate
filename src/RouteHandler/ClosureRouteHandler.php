@@ -3,8 +3,8 @@
 namespace Apiate\RouteHandler;
 
 use Closure;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\Request;
+use Apiate\Response;
 
 class ClosureRouteHandler implements RouteHandlerInterface
 {

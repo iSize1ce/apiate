@@ -2,8 +2,8 @@
 
 namespace Apiate\RouteHandler;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\Request;
+use Apiate\Response;
 
 interface RouteHandlerInterface
 {

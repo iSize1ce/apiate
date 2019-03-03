@@ -3,8 +3,8 @@
 namespace Apiate\RouteHandler;
 
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\Request;
+use Apiate\Response;
 
 class ControllerRouteHandler implements RouteHandlerInterface
 {

@@ -10,7 +10,6 @@ use Apiate\Route\RouteProvider;
 use Apiate\RouteMatcher\DefaultRouteMatcher;
 use Apiate\RouteMatcher\RouteMatcherInterface;
 use Closure;
-use Symfony\Component\HttpFoundation\Response;
 
 class Apiate
 {

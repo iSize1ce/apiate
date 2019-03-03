@@ -3,7 +3,7 @@
 namespace Apiate\Route;
 
 use Apiate\RouteHandler\RouteHandlerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Apiate\Request;
 
 class RouteProvider
 {

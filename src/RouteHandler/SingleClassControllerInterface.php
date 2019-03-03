@@ -3,7 +3,7 @@
 namespace Apiate\RouteHandler;
 
 use Apiate\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Apiate\Response;
 
 interface SingleClassControllerInterface
 {
