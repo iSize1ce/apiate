@@ -11,7 +11,7 @@ class RouteCollection implements IteratorAggregate
     /**
      * @var Route[]
      */
-    private $routes;
+    private $routes = [];
 
     public function add(Route $route): void
     {
