@@ -6,6 +6,9 @@ use Apiate\HTTP\Request;
 use Apiate\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group unit
+ */
 class ClosureRouteHandlerTest extends TestCase
 {
     public function handleTest()
