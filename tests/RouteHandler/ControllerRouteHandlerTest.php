@@ -6,6 +6,14 @@ use Apiate\HTTP\Request;
 use Apiate\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
+class TestController
+{
+    public function testMethod(Request $request): Response
+    {
+        return new Response();
+    }
+}
+
 /**
  * @group unit
  * @covers ControllerRouteHandler
@@ -20,8 +28,9 @@ class ControllerRouteHandlerTest extends TestCase
         $request = new Request();
         $response = new Response('Test response');
 
-        $controller = $this->createMock(\stdClass::class);
-        $controller->expects($this->once())
+        $controller = $this->createMock(TestController::class);
+        $controller
+            ->expects($this->once())
             ->method('testMethod')
             ->willReturn($response);
 
