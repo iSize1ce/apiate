@@ -7,6 +7,7 @@ use Apiate\Route\RouteCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @group unit
  * @covers DefaultRouteMatcher
  */
 class DefaultRouteMatcherTest extends TestCase
