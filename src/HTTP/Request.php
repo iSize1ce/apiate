@@ -1,6 +1,6 @@
 <?php
 
-namespace Apiate;
+namespace Apiate\HTTP;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;

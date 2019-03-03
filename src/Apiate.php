@@ -2,6 +2,8 @@
 
 namespace Apiate;
 
+use Apiate\HTTP\Request;
+use Apiate\HTTP\Response;
 use Apiate\ResponseSender\DefaultResponseSender;
 use Apiate\ResponseSender\ResponseSenderInterface;
 use Apiate\Route\Route;

@@ -2,8 +2,8 @@
 
 namespace Apiate\RouteHandler;
 
-use Apiate\Request;
-use Apiate\Response;
+use Apiate\HTTP\Request;
+use Apiate\HTTP\Response;
 
 interface SingleClassControllerInterface
 {

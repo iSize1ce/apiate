@@ -3,8 +3,8 @@
 namespace Apiate\RouteHandler;
 
 use Closure;
-use Apiate\Request;
-use Apiate\Response;
+use Apiate\HTTP\Request;
+use Apiate\HTTP\Response;
 
 class ClosureRouteHandler implements RouteHandlerInterface
 {

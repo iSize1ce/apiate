@@ -2,7 +2,7 @@
 
 namespace Apiate\ResponseSender;
 
-use Apiate\Response;
+use Apiate\HTTP\Response;
 
 interface ResponseSenderInterface
 {

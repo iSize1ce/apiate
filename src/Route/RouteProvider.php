@@ -3,7 +3,7 @@
 namespace Apiate\Route;
 
 use Apiate\RouteHandler\RouteHandlerInterface;
-use Apiate\Request;
+use Apiate\HTTP\Request;
 
 class RouteProvider
 {

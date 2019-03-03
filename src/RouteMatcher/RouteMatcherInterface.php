@@ -2,7 +2,7 @@
 
 namespace Apiate\RouteMatcher;
 
-use Apiate\Request;
+use Apiate\HTTP\Request;
 use Apiate\Route\Route;
 
 interface RouteMatcherInterface

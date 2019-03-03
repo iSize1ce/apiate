@@ -3,8 +3,8 @@
 namespace Apiate\RouteHandler;
 
 use stdClass;
-use Apiate\Request;
-use Apiate\Response;
+use Apiate\HTTP\Request;
+use Apiate\HTTP\Response;
 
 class ControllerRouteHandler implements RouteHandlerInterface
 {
