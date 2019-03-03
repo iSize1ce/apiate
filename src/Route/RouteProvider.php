@@ -51,8 +51,8 @@ class RouteProvider
 
     public function handle(string $method, string $path, RouteHandlerInterface $handler): void
     {
-        $this->routes->add(
-            new Route($method, $this->path . $path, $handler)
-        );
+        $route = new Route($method, $this->path . $path, $handler);
+
+        $this->routes->add($route);
     }
 }
