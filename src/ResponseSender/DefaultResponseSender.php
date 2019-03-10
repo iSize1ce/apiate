@@ -10,22 +10,20 @@ class DefaultResponseSender implements ResponseSenderInterface
     public function send(ResponseInterface $response): void
     {
         if ($response instanceof ServerRequestInterface) {
-            // Cookies
             foreach ($response->getCookieParams() as $name => $value) {
                 setcookie($name, $value);
             }
         }
 
-        // Headers
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
                 header("$name: $value");
             }
         }
 
-        // Http status
         header("HTTP/{$response->getProtocolVersion()} {$response->getStatusCode()} {$response->getReasonPhrase()}");
 
+        // @TODO Stream?
         echo $response->getBody()->getContents();
     }
 }
