@@ -2,10 +2,10 @@
 
 namespace Apiate\RouteMatcher;
 
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\RequestInterface;
 use Apiate\Route\Route;
 
 interface RouteMatcherInterface
 {
-    public function getRouteByRequest(Request $request): Route;
+    public function getRouteByRequest(RequestInterface $request): Route;
 }

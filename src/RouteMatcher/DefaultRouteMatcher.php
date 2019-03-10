@@ -2,7 +2,7 @@
 
 namespace Apiate\RouteMatcher;
 
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\RequestInterface;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 
@@ -18,9 +18,9 @@ class DefaultRouteMatcher implements RouteMatcherInterface
         $this->routeCollection = $routeCollection;
     }
 
-    public function getRouteByRequest(Request $request): Route
+    public function getRouteByRequest(RequestInterface $request): Route
     {
-        $requestPath = $request->getPathInfo();
+        $requestPath = $request->getUri()->getPath();
         $requestMethod = $request->getMethod();
 
         $matchedRoute = null;
@@ -36,12 +36,6 @@ class DefaultRouteMatcher implements RouteMatcherInterface
             $routePathRegex = str_replace('/', '\/', $routePathRegex);
 
             if (preg_match_all('/^' . $routePathRegex . '$/Ui', $requestPath, $matches) === 1) {
-                foreach ($matches as $key => $match) {
-                    if (is_string($key)) {
-                        $request->attributes->set($key, $match[0]);
-                    }
-                }
-
                 return $route;
             }
         }

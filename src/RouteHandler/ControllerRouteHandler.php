@@ -2,8 +2,8 @@
 
 namespace Apiate\RouteHandler;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class ControllerRouteHandler implements RouteHandlerInterface
 {
@@ -20,7 +20,7 @@ class ControllerRouteHandler implements RouteHandlerInterface
         $this->method = $method;
     }
 
-    public function handle(Request $request): Response
+    public function handle(RequestInterface $request): ResponseInterface
     {
         return $this->controllerObject->{$this->method}($request);
     }

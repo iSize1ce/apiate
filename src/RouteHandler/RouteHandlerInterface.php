@@ -2,10 +2,10 @@
 
 namespace Apiate\RouteHandler;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface RouteHandlerInterface
 {
-    public function handle(Request $request): Response;
+    public function handle(RequestInterface $request): ResponseInterface;
 }

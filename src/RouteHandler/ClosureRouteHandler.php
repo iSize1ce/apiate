@@ -3,8 +3,8 @@
 namespace Apiate\RouteHandler;
 
 use Closure;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class ClosureRouteHandler implements RouteHandlerInterface
 {
@@ -18,7 +18,7 @@ class ClosureRouteHandler implements RouteHandlerInterface
         $this->closure = $closure;
     }
 
-    public function handle(Request $request): Response
+    public function handle(RequestInterface $request): ResponseInterface
     {
         $closure = $this->closure;
 

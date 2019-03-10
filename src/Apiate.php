@@ -2,8 +2,6 @@
 
 namespace Apiate;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Apiate\ResponseSender\DefaultResponseSender;
 use Apiate\ResponseSender\ResponseSenderInterface;
 use Apiate\Route\Route;
@@ -12,6 +10,8 @@ use Apiate\Route\RouteProvider;
 use Apiate\RouteMatcher\DefaultRouteMatcher;
 use Apiate\RouteMatcher\RouteMatcherInterface;
 use Closure;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Apiate
 {
@@ -52,7 +52,7 @@ class Apiate
         return new RouteProvider('', $this->routes);
     }
 
-    public function handle(Request $request): void
+    public function handle(RequestInterface $request): void
     {
         $response = null;
 
@@ -87,13 +87,8 @@ class Apiate
         return $this;
     }
 
-    public function sendResponse(Response $response, ?Request $request = null): void
+    public function sendResponse(ResponseInterface $response): void
     {
-        // @TODO move to sender or remove
-        if ($request !== null) {
-            $response->prepare($request);
-        }
-
         $this->responseSender->send($response);
     }
 }

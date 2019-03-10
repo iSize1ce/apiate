@@ -2,11 +2,11 @@
 
 namespace Apiate\ResponseSender;
 
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 
 class DefaultResponseSender implements ResponseSenderInterface
 {
-    public function send(Response $response): void
+    public function send(ResponseInterface $response): void
     {
         $response->send();
     }
