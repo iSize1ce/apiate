@@ -1,12 +1,12 @@
 <?php
 
-namespace Apiate\RequestHandler;
+namespace Apiate\RouteHandler;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ControllerRequestHandler implements RequestHandlerInterface
+class ControllerRouteHandler implements RequestHandlerInterface
 {
     private $controllerObject;
 

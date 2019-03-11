@@ -1,21 +1,21 @@
 <?php
 
-namespace Apiate\RequestHandler;
+namespace Apiate\RouteHandler;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class RequestHandler implements RequestHandlerInterface
+class RouteHandler implements RequestHandlerInterface
 {
     /**
      * @var RequestHandlerInterface
      */
     private $requestHandler;
 
-    public function __construct(RequestHandlerInterface $controller)
+    public function __construct(RequestHandlerInterface $requestHandler)
     {
-        $this->requestHandler = $controller;
+        $this->requestHandler = $requestHandler;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

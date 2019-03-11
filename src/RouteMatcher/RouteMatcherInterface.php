@@ -2,10 +2,10 @@
 
 namespace Apiate\RouteMatcher;
 
-use Psr\Http\Message\RequestInterface;
 use Apiate\Route\Route;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface RouteMatcherInterface
 {
-    public function getRouteByRequest(RequestInterface $request): Route;
+    public function getRouteByRequest(ServerRequestInterface $request): Route;
 }

@@ -2,7 +2,7 @@
 
 namespace Apiate\Route;
 
-use Apiate\RequestHandler\RequestHandlerInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 interface RouteInterface
 {

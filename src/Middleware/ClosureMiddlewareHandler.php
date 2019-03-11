@@ -1,13 +1,14 @@
 <?php
 
-namespace Apiate\RequestHandler;
+namespace Apiate\Middleware;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ClosureRequestHandler implements RequestHandlerInterface
+class ClosureMiddlewareHandler implements MiddlewareInterface
 {
     /**
      * @var Closure
@@ -19,10 +20,10 @@ class ClosureRequestHandler implements RequestHandlerInterface
         $this->closure = $closure;
     }
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $closure = $this->closure;
 
-        return $closure($request);
+        return $closure($request, $handler);
     }
 }

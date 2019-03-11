@@ -2,7 +2,7 @@
 
 namespace Apiate\Route;
 
-use Apiate\RequestHandler\RequestHandlerInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class RouteProvider
 {
@@ -30,22 +30,26 @@ class RouteProvider
 
     public function get(string $path, RequestHandlerInterface $handler): void
     {
-        $this->handle(Request::METHOD_GET, $path, $handler);
+        // @TODO Use const or delete method
+        $this->handle('GET', $path, $handler);
     }
 
     public function post(string $path, RequestHandlerInterface $handler): void
     {
-        $this->handle(Request::METHOD_POST, $path, $handler);
+        // @TODO Use const or delete method
+        $this->handle('POST', $path, $handler);
     }
 
     public function delete(string $path, RequestHandlerInterface $handler): void
     {
-        $this->handle(Request::METHOD_DELETE, $path, $handler);
+        // @TODO Use const or delete method
+        $this->handle('DELETE', $path, $handler);
     }
 
     public function put(string $path, RequestHandlerInterface $handler): void
     {
-        $this->handle(Request::METHOD_PUT, $path, $handler);
+        // @TODO Use const or delete method
+        $this->handle('PUT', $path, $handler);
     }
 
     public function handle(string $method, string $path, RequestHandlerInterface $handler): void

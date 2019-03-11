@@ -1,6 +1,6 @@
 <?php
 
-namespace Apiate\RequestHandler;
+namespace Apiate\RouteHandler;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +17,12 @@ class TestRouteHandler implements RouteHandlerInterface
 
 /**
  * @group unit
- * @covers RequestHandler
+ * @covers RouteHandler
  */
 class SingleClassControllerRouteHandlerTest extends TestCase
 {
     /**
-     * @covers RequestHandler::handle
+     * @covers RouteHandler::handle
      */
     public function testHandle()
     {
@@ -36,7 +36,7 @@ class SingleClassControllerRouteHandlerTest extends TestCase
             ->method('handle')
             ->willReturn($response);
 
-        $handler = new RequestHandler($controller);
+        $handler = new RouteHandler($controller);
 
         $actual = $handler->handle($request);
 

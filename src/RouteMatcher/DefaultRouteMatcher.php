@@ -2,9 +2,9 @@
 
 namespace Apiate\RouteMatcher;
 
-use Psr\Http\Message\RequestInterface;
 use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
+use Psr\Http\Message\ServerRequestInterface;
 
 class DefaultRouteMatcher implements RouteMatcherInterface
 {
@@ -18,7 +18,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
         $this->routeCollection = $routeCollection;
     }
 
-    public function getRouteByRequest(RequestInterface $request): Route
+    public function getRouteByRequest(ServerRequestInterface $request): Route
     {
         $requestPath = $request->getUri()->getPath();
         $requestMethod = $request->getMethod();

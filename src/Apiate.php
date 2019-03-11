@@ -8,69 +8,61 @@ use Apiate\Route\Route;
 use Apiate\Route\RouteCollection;
 use Apiate\Route\RouteProvider;
 use Apiate\RouteMatcher\DefaultRouteMatcher;
-use Apiate\RouteMatcher\RouteMatcherInterface;
 use Closure;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class Apiate
 {
     /**
+     * @var RequestHandlerInterface
+     */
+    private $requestHandler;
+
+    /**
      * @var RouteCollection|Route[]
      */
-    private $routes;
-
-    /**
-     * @var Closure[]
-     */
-    private $beforeMiddleware;
-
-    /**
-     * @var Closure[]
-     */
-    private $afterMiddleware;
-
-    /**
-     * @var RouteMatcherInterface
-     */
-    private $routeMatcher;
+    private $routeCollection;
 
     /**
      * @var ResponseSenderInterface
      */
     private $responseSender;
 
-    public function __construct(?RouteCollection $routeCollection = null, ?RouteMatcherInterface $routeMatcher = null, ?ResponseSenderInterface $responseSender = null)
+    /**
+     * @var MiddlewareInterface[]
+     */
+    private $beforeMiddleware;
+
+    /**
+     * @var MiddlewareInterface[]
+     */
+    private $afterMiddleware;
+
+    public function __construct(?RequestHandlerInterface $requestHandler = null, ?RouteCollection $routeCollection = null, ?ResponseSenderInterface $responseSender = null)
     {
-        $this->routes = $routeCollection ?? new RouteCollection();
-        $this->routeMatcher = $routeMatcher ?? new DefaultRouteMatcher($this->routes);
+        $this->requestHandler = $requestHandler ?? new RequestHandler(new DefaultRouteMatcher())
+        $this->routeCollection = $routeCollection ?? new RouteCollection();
         $this->responseSender = $responseSender ?? new DefaultResponseSender();
+        $this->requestHandler = $requestHandler;
     }
 
-    public function getRoutes(): RouteProvider
-    {
-        return new RouteProvider('', $this->routes);
-    }
-
-    public function handle(RequestInterface $request): void
+    public function handle(ServerRequestInterface $request): void
     {
         $response = null;
 
         foreach ($this->beforeMiddleware as $before) {
-            $response = $before($request);
+            $response = $before->process($request, $this->requestHandler);
         }
 
-        if ($response === null) {
-            $matchedRoute = $this->routeMatcher->getRouteByRequest($request);
-
-            $response = $matchedRoute->getHandler()->handle($request);
-        }
+        $response = $this->requestHandler->handle($request);
 
         foreach ($this->afterMiddleware as $after) {
-            $after($request, $response);
+            $response = $after->process($request, $this->requestHandler);
         }
 
-        $this->sendResponse($response);
+        $this->responseSender->send($response);
     }
 
     public function before(Closure $closure, ?int $weight = null): self
@@ -87,8 +79,8 @@ class Apiate
         return $this;
     }
 
-    public function sendResponse(ResponseInterface $response): void
+    public function getRouteProvider(): RouteProvider
     {
-        $this->responseSender->send($response);
+        return new RouteProvider('', $this->routeCollection);
     }
 }
