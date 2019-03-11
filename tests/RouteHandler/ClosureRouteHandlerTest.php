@@ -1,6 +1,6 @@
 <?php
 
-namespace Apiate\RouteHandler;
+namespace Apiate\RequestHandler;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -8,12 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group unit
- * @covers ClosureRouteHandler
+ * @covers ClosureRequestHandler
  */
 class ClosureRouteHandlerTest extends TestCase
 {
     /**
-     * @covers ClosureRouteHandler::handle
+     * @covers ClosureRequestHandler::handle
      */
     public function testHandle()
     {
@@ -24,7 +24,7 @@ class ClosureRouteHandlerTest extends TestCase
             return $response;
         };
 
-        $handler = new ClosureRouteHandler($closure);
+        $handler = new ClosureRequestHandler($closure);
 
         $expected = $handler->handle($request);
 

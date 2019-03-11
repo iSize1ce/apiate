@@ -1,12 +1,13 @@
 <?php
 
-namespace Apiate\RouteHandler;
+namespace Apiate\RequestHandler;
 
 use Closure;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class ClosureRouteHandler implements RouteHandlerInterface
+class ClosureRequestHandler implements RequestHandlerInterface
 {
     /**
      * @var Closure
@@ -18,7 +19,7 @@ class ClosureRouteHandler implements RouteHandlerInterface
         $this->closure = $closure;
     }
 
-    public function handle(RequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $closure = $this->closure;
 

@@ -2,7 +2,7 @@
 
 namespace Apiate\Route;
 
-use Apiate\RouteHandler\RouteHandlerInterface;
+use Apiate\RequestHandler\RequestHandlerInterface;
 
 interface RouteInterface
 {
@@ -10,5 +10,5 @@ interface RouteInterface
 
     public function getPath(): string;
 
-    public function getHandler(): RouteHandlerInterface;
+    public function getHandler(): RequestHandlerInterface;
 }

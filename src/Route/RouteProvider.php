@@ -2,7 +2,7 @@
 
 namespace Apiate\Route;
 
-use Apiate\RouteHandler\RouteHandlerInterface;
+use Apiate\RequestHandler\RequestHandlerInterface;
 
 class RouteProvider
 {
@@ -28,27 +28,27 @@ class RouteProvider
         $closure($routeProvider);
     }
 
-    public function get(string $path, RouteHandlerInterface $handler): void
+    public function get(string $path, RequestHandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_GET, $path, $handler);
     }
 
-    public function post(string $path, RouteHandlerInterface $handler): void
+    public function post(string $path, RequestHandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_POST, $path, $handler);
     }
 
-    public function delete(string $path, RouteHandlerInterface $handler): void
+    public function delete(string $path, RequestHandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_DELETE, $path, $handler);
     }
 
-    public function put(string $path, RouteHandlerInterface $handler): void
+    public function put(string $path, RequestHandlerInterface $handler): void
     {
         $this->handle(Request::METHOD_PUT, $path, $handler);
     }
 
-    public function handle(string $method, string $path, RouteHandlerInterface $handler): void
+    public function handle(string $method, string $path, RequestHandlerInterface $handler): void
     {
         $route = new Route($method, $this->path . $path, $handler);
 

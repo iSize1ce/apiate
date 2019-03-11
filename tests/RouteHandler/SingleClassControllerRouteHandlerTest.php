@@ -1,13 +1,13 @@
 <?php
 
-namespace Apiate\RouteHandler;
+namespace Apiate\RequestHandler;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class TestSingleClassController implements SingleClassControllerInterface
+class TestRouteHandler implements RouteHandlerInterface
 {
     public function handle(Request $request): Response
     {
@@ -17,26 +17,26 @@ class TestSingleClassController implements SingleClassControllerInterface
 
 /**
  * @group unit
- * @covers SingleClassControllerRouteHandler
+ * @covers RequestHandler
  */
 class SingleClassControllerRouteHandlerTest extends TestCase
 {
     /**
-     * @covers SingleClassControllerRouteHandler::handle
+     * @covers RequestHandler::handle
      */
     public function testHandle()
     {
         $request = new Request();
         $response = new Response('Test response');
 
-        /** @var SingleClassControllerInterface|MockObject $controller */
-        $controller = $this->createMock(TestSingleClassController::class);
+        /** @var RouteHandlerInterface|MockObject $controller */
+        $controller = $this->createMock(TestRouteHandler::class);
         $controller
             ->expects($this->once())
             ->method('handle')
             ->willReturn($response);
 
-        $handler = new SingleClassControllerRouteHandler($controller);
+        $handler = new RequestHandler($controller);
 
         $actual = $handler->handle($request);
 
